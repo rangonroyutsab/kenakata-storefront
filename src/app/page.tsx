@@ -1,3 +1,4 @@
+import { ProductCard } from "@/components/ProductCard";
 import { getProducts } from "@/services/products";
 
 export default async function Home() {
@@ -21,13 +22,7 @@ export default async function Home() {
         </div>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {products.slice(0, 8).map((product) => (
-            <article
-              key={product.id}
-              className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
-            >
-              <h2 className="text-base font-semibold">{product.title}</h2>
-              <p className="mt-2 text-sm text-slate-600">${product.price}</p>
-            </article>
+            <ProductCard key={product.id} product={product} />
           ))}
         </div>
       </section>
