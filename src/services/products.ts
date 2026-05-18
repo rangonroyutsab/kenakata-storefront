@@ -43,3 +43,13 @@ export async function getProductsByCategoryId(
 
     return response.json();
 }
+
+export async function getCategoryById(id: string): Promise<Category> {
+    const response = await fetch(`${API_BASE_URL}/categories/${id}`);
+
+    if (!response.ok) {
+        throw new Error("Failed to fetch category");
+    }
+
+    return response.json();
+}
