@@ -71,11 +71,12 @@ Completed so far:
 - Loading, error, empty, and 404 states
 - Basic site header and footer
 - Stable local development setup using Webpack mode
+- Category browsing with active category navigation
+- Product search on homepage and category pages
+- Cart state with add, remove, and quantity controls
+- Cart persistence using localStorage
 
 Upcoming work:
 
 - Improve visual design
-- Add category browsing
-- Add product search/filtering
-- Add cart UI and cart state
 - Prepare deployment
