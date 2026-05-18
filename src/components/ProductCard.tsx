@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ShoppingBag } from "lucide-react";
 
+import { formatMoney, getProductHref, getProductImage } from "@/lib/commerce";
 import type { Product } from "@/types/product";
 
 type ProductCardProps = {
@@ -8,40 +10,41 @@ type ProductCardProps = {
 };
 
 export function ProductCard({ product }: ProductCardProps) {
-  const imageUrl = product.images.find(
-    (image) => image.startsWith("https://") && !image.includes("placehold.co")
-  );
+  const imageUrl = getProductImage(product);
 
   return (
-    <article className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md">
-      <Link href={`/products/${product.id}`} className="block">
-        <div className="relative aspect-square bg-slate-100">
+    <article className="group overflow-hidden rounded-xl border border-[var(--outline-variant)]/20 bg-[var(--surface-container-lowest)] shadow-soft transition hover:-translate-y-1">
+      <Link href={getProductHref(product)} className="block">
+        <div className="relative aspect-[3/4] bg-[var(--surface-container-high)]">
           {imageUrl ? (
             <Image
               src={imageUrl}
               alt={product.title}
               fill
               sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
-              className="object-cover transition duration-300 group-hover:scale-105"
+              className="object-cover transition duration-500 group-hover:scale-105"
             />
           ) : (
-            <div className="flex h-full w-full items-center justify-center px-4 text-center text-sm text-slate-500">
+            <div className="flex h-full w-full items-center justify-center px-4 text-center text-sm text-[var(--on-surface-variant)]">
               No image available
             </div>
           )}
+          <span className="absolute bottom-4 right-4 inline-flex h-11 w-11 items-center justify-center rounded-full bg-[var(--surface)]/90 text-[var(--primary)] opacity-0 shadow-soft backdrop-blur transition group-hover:opacity-100">
+            <ShoppingBag size={20} />
+          </span>
         </div>
 
         <div className="p-4">
-          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+          <p className="mb-2 text-sm text-[var(--on-surface-variant)]">
             {product.category.name}
           </p>
 
-          <h2 className="line-clamp-2 text-base font-semibold">
+          <h2 className="font-headline line-clamp-2 text-lg font-bold text-[var(--on-surface)]">
             {product.title}
           </h2>
 
-          <p className="mt-2 text-sm font-medium text-slate-700">
-            ${product.price}
+          <p className="mt-3 text-base font-bold text-[var(--primary)]">
+            {formatMoney(product.price)}
           </p>
         </div>
       </Link>

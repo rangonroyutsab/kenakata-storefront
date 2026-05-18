@@ -12,12 +12,12 @@ export function ProductGrid({
 }: ProductGridProps) {
   if (products.length === 0) {
     return (
-      <div className="rounded-2xl border border-dashed border-slate-300 px-6 py-12 text-center">
-        <h2 className="text-lg font-semibold text-slate-950">
+      <div className="rounded-xl border border-dashed border-[var(--outline-variant)] bg-[var(--surface-container-low)] px-6 py-12 text-center">
+        <h2 className="font-headline text-xl font-bold text-[var(--on-surface)]">
           No products found
         </h2>
 
-        <p className="mt-2 text-sm text-slate-600">{emptyMessage}</p>
+        <p className="mt-2 text-sm text-[var(--on-surface-variant)]">{emptyMessage}</p>
       </div>
     );
   }
@@ -25,7 +25,6 @@ export function ProductGrid({
   return (
     <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
       {products.map((product) => (
-        // pass the current product item into ProductCard using a prop named product.
         <ProductCard key={product.id} product={product} />
       ))}
     </div>

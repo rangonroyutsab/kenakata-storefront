@@ -1,8 +1,30 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #faf6f0;
+  --surface: #faf6f0;
+  --surface-bright: #faf6f0;
+  --surface-container-lowest: #ffffff;
+  --surface-container-low: #f5f1ea;
+  --surface-container: #f0ece4;
+  --surface-container-high: #eae6de;
+  --surface-container-highest: #e4e0d8;
+  --surface-variant: #e4e0d8;
+  --primary: #4a7c59;
+  --primary-strong: #2a6038;
+  --primary-container: #c8e8d0;
+  --tertiary: #705c30;
+  --tertiary-strong: #604e28;
+  --tertiary-soft: #f8e0a8;
+  --error: #b83230;
+  --error-container: #ffdad8;
+  --on-primary: #ffffff;
+  --on-primary-container: #002110;
+  --on-surface: #2e3230;
+  --on-surface-variant: #4a4e4a;
+  --outline: #74796e;
+  --outline-variant: #c4c8bc;
+  --shadow-soft: 0 4px 20px rgba(46, 50, 48, 0.06);
 }
 
 * {
@@ -16,8 +38,20 @@ html {
 body {
   margin: 0;
   background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--on-surface);
+  font-family: var(--font-body), Arial, Helvetica, sans-serif;
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.font-headline {
+  font-family: var(--font-headline), Georgia, serif;
+  letter-spacing: 0;
 }
 
 a {
@@ -30,4 +64,66 @@ input,
 textarea,
 select {
   font: inherit;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  outline-color: var(--primary);
+}
+
+::selection {
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+}
+
+.bg-background {
+  background-color: var(--background);
+}
+
+.bg-surface {
+  background-color: var(--surface);
+}
+
+.bg-surface-container {
+  background-color: var(--surface-container);
+}
+
+.bg-surface-container-low {
+  background-color: var(--surface-container-low);
+}
+
+.bg-surface-container-lowest {
+  background-color: var(--surface-container-lowest);
+}
+
+.text-on-surface {
+  color: var(--on-surface);
+}
+
+.text-on-surface-variant {
+  color: var(--on-surface-variant);
+}
+
+.text-primary {
+  color: var(--primary);
+}
+
+.text-tertiary {
+  color: var(--tertiary);
+}
+
+.shadow-soft {
+  box-shadow: var(--shadow-soft);
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
 }
