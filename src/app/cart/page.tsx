@@ -5,7 +5,12 @@ import Link from "next/link";
 import { useCart } from "@/components/CartProvider";
 
 export default function CartPage() {
-    const { items, removeFromCart } = useCart();
+    const {
+        items,
+        removeFromCart,
+        increaseQuantity,
+        decreaseQuantity,
+    } = useCart();
 
     const totalPrice = items.reduce(
         (total, item) => total + item.price * item.quantity,
@@ -44,6 +49,28 @@ export default function CartPage() {
                                     <p className="mt-1 text-sm text-slate-600">
                                         ${item.price} × {item.quantity}
                                     </p>
+
+                                    <div className="mt-3 flex items-center gap-2">
+                                        <button
+                                            type="button"
+                                            onClick={() => decreaseQuantity(item.id)}
+                                            className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 text-sm font-semibold transition hover:border-slate-950"
+                                        >
+                                            -
+                                        </button>
+
+                                        <span className="min-w-6 text-center text-sm font-semibold">
+                                            {item.quantity}
+                                        </span>
+
+                                        <button
+                                            type="button"
+                                            onClick={() => increaseQuantity(item.id)}
+                                            className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 text-sm font-semibold transition hover:border-slate-950"
+                                        >
+                                            +
+                                        </button>
+                                    </div>
                                 </div>
 
                                 <div className="text-right">
