@@ -1,6 +1,6 @@
+import { HomeHero } from "@/components/HomeHero";
 import { ProductGrid } from "@/components/ProductGrid";
 import { getProducts } from "@/services/products";
-import { HomeHero } from "@/components/HomeHero";
 
 export default async function Home() {
   const products = await getProducts();
@@ -12,5 +12,5 @@ export default async function Home() {
         <ProductGrid products={products.slice(0, 8)} />
       </section>
     </main>
-  )
+  );
 }
