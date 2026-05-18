@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ProductGrid } from "@/components/ProductGrid";
 import {
     getCategories,
     getCategoryById,
@@ -8,7 +7,7 @@ import {
 } from "@/services/products";
 import { CategoryList } from "@/components/CategoryList";
 import { VISIBLE_CATEGORY_NAMES } from "@/constants/api";
-import { SearchInput } from "@/components/SearchInput";
+import { SearchableProductSection } from "@/components/SearchableProductSection";
 
 type CategoryPageProps = {
     params: Promise<{
@@ -62,9 +61,11 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                     activeCategoryId={category.id}
                 />
 
-                <SearchInput placeholder={`Search ${category.name} products...`} />
+                <SearchableProductSection
+                    products={products}
+                    placeholder={`Search ${category.name} products...`}
+                />
 
-                <ProductGrid products={products} />
             </section>
         </main>
     );
