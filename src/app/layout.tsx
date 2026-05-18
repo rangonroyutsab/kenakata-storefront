@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Kenaata Storefront",
+  title: "Kenakata Storefront",
   description: "A modern e-commerce storefront built with Next.js",
 };
 
