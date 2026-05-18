@@ -1,8 +1,8 @@
 import { CategoryList } from "@/components/CategoryList";
 import { HomeHero } from "@/components/HomeHero";
 import { SearchableProductSection } from "@/components/SearchableProductSection";
-import { VISIBLE_CATEGORY_NAMES } from "@/constants/api";
 import { getCategories, getProducts } from "@/services/products";
+import { HOME_PRODUCT_LIMIT, VISIBLE_CATEGORY_NAMES } from "@/constants/api";
 
 export default async function Home() {
   const [products, categories] = await Promise.all([
@@ -19,7 +19,10 @@ export default async function Home() {
       <section className="mx-auto max-w-6xl">
         <HomeHero />
         <CategoryList categories={visibleCategories} />
-        <SearchableProductSection products={products} />
+        <SearchableProductSection
+          products={products}
+          initialLimit={HOME_PRODUCT_LIMIT}
+        />
       </section>
     </main>
   );

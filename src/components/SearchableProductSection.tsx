@@ -9,25 +9,27 @@ import type { Product } from "@/types/product";
 type SearchableProductSectionProps = {
     products: Product[];
     placeholder?: string;
+    initialLimit?: number;
 };
 
 export function SearchableProductSection({
     products,
     placeholder,
+    initialLimit,
 }: SearchableProductSectionProps) {
     const [query, setQuery] = useState("");
 
-    const filteredProducts = useMemo(() => {
+    const visibleProducts = useMemo(() => {
         const normalizedQuery = query.trim().toLowerCase();
 
         if (!normalizedQuery) {
-            return products;
+            return initialLimit ? products.slice(0, initialLimit) : products;
         }
 
         return products.filter((product) =>
             product.title.toLowerCase().includes(normalizedQuery)
         );
-    }, [products, query]);
+    }, [products, query, initialLimit]);
 
     return (
         <>
@@ -38,7 +40,7 @@ export function SearchableProductSection({
             />
 
             <ProductGrid
-                products={filteredProducts}
+                products={visibleProducts}
                 emptyMessage="No products matched your search."
             />
         </>
