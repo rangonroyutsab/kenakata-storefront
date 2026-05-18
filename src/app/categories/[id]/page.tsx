@@ -8,6 +8,7 @@ import {
 } from "@/services/products";
 import { CategoryList } from "@/components/CategoryList";
 import { VISIBLE_CATEGORY_NAMES } from "@/constants/api";
+import { SearchInput } from "@/components/SearchInput";
 
 type CategoryPageProps = {
     params: Promise<{
@@ -56,11 +57,14 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                     </h1>
                 </div>
 
-                <ProductGrid products={products} />
                 <CategoryList
                     categories={visibleCategories}
                     activeCategoryId={category.id}
                 />
+
+                <SearchInput placeholder={`Search ${category.name} products...`} />
+
+                <ProductGrid products={products} />
             </section>
         </main>
     );
