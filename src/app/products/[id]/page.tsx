@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { getProductById } from "@/services/products";
 import { notFound } from "next/navigation";
+import { AddToCartButton } from "@/components/AddToCartButton";
 
 type ProductPageProps = {
   params: Promise<{
@@ -65,6 +66,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <p className="mt-6 leading-7 text-slate-600">
               {product.description}
             </p>
+
+            <AddToCartButton product={product} />
+
           </div>
         </div>
       </section>
