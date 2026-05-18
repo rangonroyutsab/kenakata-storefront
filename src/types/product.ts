@@ -13,3 +13,5 @@ export type Product = {
   category: ProductCategory;
   images: string[];
 };
+
+export type Category = ProductCategory;
