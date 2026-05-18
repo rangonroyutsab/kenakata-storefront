@@ -16,7 +16,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   );
 
   return (
-    <main className="min-h-screen bg-white px-6 py-12 text-slate-950">
+    <main className="bg-white px-6 py-12 text-slate-950">
       <section className="mx-auto max-w-6xl">
         <Link
           href="/"
