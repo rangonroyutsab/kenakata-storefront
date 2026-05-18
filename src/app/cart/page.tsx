@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useCart } from "@/components/CartProvider";
 
 export default function CartPage() {
-    const { items } = useCart();
+    const { items, removeFromCart } = useCart();
 
     const totalPrice = items.reduce(
         (total, item) => total + item.price * item.quantity,
@@ -46,7 +46,17 @@ export default function CartPage() {
                                     </p>
                                 </div>
 
-                                <p className="font-semibold">${item.price * item.quantity}</p>
+                                <div className="text-right">
+                                    <p className="font-semibold">${item.price * item.quantity}</p>
+
+                                    <button
+                                        type="button"
+                                        onClick={() => removeFromCart(item.id)}
+                                        className="mt-2 text-sm font-semibold text-red-500 transition hover:text-red-600"
+                                    >
+                                        Remove
+                                    </button>
+                                </div>
                             </article>
                         ))}
 
