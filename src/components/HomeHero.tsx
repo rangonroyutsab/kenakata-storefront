@@ -2,7 +2,7 @@ export function HomeHero() {
   return (
     <div className="mb-10">
       <p className="mb-3 text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">
-        KenaKata.com
+        Kenakata.com
       </p>
 
       <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">

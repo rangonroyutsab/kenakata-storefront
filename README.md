@@ -1,4 +1,4 @@
-# KenaKata Storefront
+# Kenakata Storefront
 
 A modern e-commerce storefront built with Next.js App Router, TypeScript, Tailwind CSS, and the Platzi Fake API.
 
