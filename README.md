@@ -1,6 +1,7 @@
-# Kenakata Storefront
+# KenaKata Storefront
 
-A modern e-commerce storefront built with Next.js App Router, TypeScript, Tailwind CSS, and the Platzi Fake API.
+A Terra-styled e-commerce MVP built with Next.js App Router, TypeScript,
+Tailwind CSS, and the Platzi Fake Store API.
 
 ## Tech Stack
 
@@ -8,18 +9,21 @@ A modern e-commerce storefront built with Next.js App Router, TypeScript, Tailwi
 - TypeScript
 - Tailwind CSS
 - App Router
-- Platzi Fake API
+- Platzi Fake Store API
+- lucide-react icons
 
 ## Features Completed
 
-- Basic homepage layout
-- Product fetching from external API
-- Reusable product card component
-- Reusable product grid component
-- Product images with Next.js Image
-- Loading UI
-- Error UI
-- Custom 404 page
+- Terra "Rooted Warmth" visual system using Literata and Nunito Sans
+- API-backed homepage, shop pagination, categories, and product detail pages
+- Product slug/id support with related products by category
+- Search, sort, category, price filtering, desktop filters, and mobile filter sheet
+- Persistent cart with desktop drawer, mobile sheet, and full cart page
+- Fake API login, profile fetch, signup, and email availability validation
+- Account page with fake API profile and demo order context
+- Local mock checkout, order confirmation, and cart clearing
+- Store locator backed by `GET /locations`
+- Page metadata, dynamic product/category metadata, loading, error, empty, and 404 states
 
 ## Getting Started
 
@@ -51,32 +55,50 @@ npm run lint
 
 ## API
 
-This project uses the Platzi Fake API:
+This project uses the Platzi Fake Store API:
 
 ```text
 https://api.escuelajs.co/api/v1
 ```
 
-## Current Status
+Used endpoints include:
 
-Core storefront foundation is complete.
+- `GET /products?offset=&limit=`
+- `GET /products/:id`
+- `GET /products/slug/:slug`
+- `GET /categories`
+- `GET /categories/:id/products`
+- `POST /auth/login`
+- `GET /auth/profile`
+- `POST /users`
+- `POST /users/is-available`
+- `GET /locations`
 
-Completed so far:
+## Demo Auth
 
-- Project setup with Next.js, TypeScript, Tailwind CSS, and App Router
-- Product listing page
-- Reusable product card and product grid components
-- Product detail pages with dynamic routing
-- Product images using Next.js Image
-- Loading, error, empty, and 404 states
-- Basic site header and footer
-- Stable local development setup using Webpack mode
-- Category browsing with active category navigation
-- Product search on homepage and category pages
-- Cart state with add, remove, and quantity controls
-- Cart persistence using localStorage
+The login page is prefilled with the Platzi demo user:
 
-Upcoming work:
+```text
+john@mail.com
+changeme
+```
 
-- Improve visual design
-- Prepare deployment
+## Deployment
+
+The app is Vercel-ready as a standard server-rendered Next.js app.
+
+Build command:
+
+```bash
+npm run build
+```
+
+Start command:
+
+```bash
+npm run start
+```
+
+No required environment variables are needed for the current MVP. Checkout and
+orders are mock/local because the fake API does not provide order or payment
+resources.

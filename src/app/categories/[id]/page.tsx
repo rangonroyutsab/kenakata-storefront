@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
@@ -14,6 +15,25 @@ type CategoryPageProps = {
         id: string;
     }>;
 };
+
+export async function generateMetadata({
+    params,
+}: CategoryPageProps): Promise<Metadata> {
+    const { id } = await params;
+
+    try {
+        const category = await getCategoryById(id);
+
+        return {
+            title: category.name,
+            description: `Browse ${category.name} products from KenaKata.`,
+        };
+    } catch {
+        return {
+            title: "Category",
+        };
+    }
+}
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
     const { id } = await params;

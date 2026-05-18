@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+
 import { ShopBrowser } from "@/components/ShopBrowser";
 import { getCategories, getProducts, getProductsByCategoryId } from "@/services/products";
 
@@ -9,6 +11,12 @@ type ShopPageProps = {
 };
 
 const PRODUCTS_PER_PAGE = 12;
+
+export const metadata: Metadata = {
+  title: "Shop",
+  description:
+    "Browse KenaKata products with API-backed categories, pagination, search, and filters.",
+};
 
 export default async function ShopPage({ searchParams }: ShopPageProps) {
   const params = await searchParams;

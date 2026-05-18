@@ -19,8 +19,12 @@ const nunitoSans = Nunito_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Kenakata Storefront",
-  description: "A modern e-commerce storefront built with Next.js",
+  title: {
+    default: "KenaKata | Rooted Warmth for Your Home",
+    template: "%s | KenaKata",
+  },
+  description:
+    "Shop Terra-styled home goods with a modern Next.js storefront powered by the Platzi Fake Store API.",
 };
 
 export default function RootLayout({

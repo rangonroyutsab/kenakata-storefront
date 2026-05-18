@@ -1,7 +1,13 @@
+import type { Metadata } from "next";
 import { MapPin, Navigation } from "lucide-react";
 
 import { getLocations } from "@/services/products";
 import type { StoreLocation } from "@/types/product";
+
+export const metadata: Metadata = {
+  title: "Store Locator",
+  description: "Find KenaKata pickup points using the Platzi Fake Store locations API.",
+};
 
 export default async function StoreLocatorPage() {
   let locations: StoreLocation[] = [];
