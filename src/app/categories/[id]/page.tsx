@@ -7,6 +7,7 @@ import {
     getProductsByCategoryId,
 } from "@/services/products";
 import { CategoryList } from "@/components/CategoryList";
+import { VISIBLE_CATEGORY_NAMES } from "@/constants/api";
 
 type CategoryPageProps = {
     params: Promise<{
@@ -31,6 +32,10 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         notFound();
     }
 
+    const visibleCategories = categories.filter((category) =>
+        VISIBLE_CATEGORY_NAMES.includes(category.name)
+    );
+
     return (
         <main className="bg-white px-6 py-12 text-slate-950">
             <section className="mx-auto max-w-6xl">
@@ -52,7 +57,10 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                 </div>
 
                 <ProductGrid products={products} />
-                <CategoryList categories={categories} activeCategoryId={category.id} />
+                <CategoryList
+                    categories={visibleCategories}
+                    activeCategoryId={category.id}
+                />
             </section>
         </main>
     );
