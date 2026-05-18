@@ -1,4 +1,5 @@
 import { getProductById } from "@/services/products";
+import Link from "next/link";
 
 type ProductPageProps = {
   params: Promise<{
@@ -13,6 +14,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
   return (
     <main className="min-h-screen bg-white px-6 py-12 text-slate-950">
       <section className="mx-auto max-w-6xl">
+        <Link
+          href="/"
+          className="mb-8 inline-flex text-sm font-semibold text-slate-600 transition hover:text-slate-950"
+        >
+          Back to products
+        </Link>
         <p className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">
           Product details
         </p>
