@@ -15,3 +15,7 @@ export type Product = {
 };
 
 export type Category = ProductCategory;
+
+export type CartItem = Product & {
+  quantity: number;
+};
