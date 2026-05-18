@@ -28,7 +28,7 @@ export function SiteHeader() {
                         href="/cart"
                         className="rounded-full bg-slate-950 px-4 py-2 text-sm font-semibold !text-white transition hover:bg-slate-800"
                     >
-                        Cart ({cartCount})
+                        Cart (<span suppressHydrationWarning>{cartCount}</span>)
                     </Link>
                 </nav>
             </div>

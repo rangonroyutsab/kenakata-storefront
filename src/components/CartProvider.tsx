@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 import type { CartItem, Product } from "@/types/product";
 
@@ -14,8 +14,30 @@ type CartContextValue = {
 
 const CartContext = createContext<CartContextValue | null>(null);
 
+const CART_STORAGE_KEY = "kenakata-cart";
+
 export function CartProvider({ children }: { children: React.ReactNode }) {
-    const [items, setItems] = useState<CartItem[]>([]);
+    const [items, setItems] = useState<CartItem[]>(() => {
+        if (typeof window === "undefined") {
+            return [];
+        }
+
+        const savedCart = window.localStorage.getItem(CART_STORAGE_KEY);
+
+        if (!savedCart) {
+            return [];
+        }
+
+        try {
+            return JSON.parse(savedCart) as CartItem[];
+        } catch {
+            return [];
+        }
+    });
+
+    useEffect(() => {
+        window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
+    }, [items]);
 
     function addToCart(product: Product) {
         setItems((currentItems) => {
