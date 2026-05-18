@@ -2,9 +2,11 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ProductGrid } from "@/components/ProductGrid";
 import {
+    getCategories,
     getCategoryById,
     getProductsByCategoryId,
 } from "@/services/products";
+import { CategoryList } from "@/components/CategoryList";
 
 type CategoryPageProps = {
     params: Promise<{
@@ -17,11 +19,13 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
     let products;
     let category;
+    let categories;
 
     try {
-        [products, category] = await Promise.all([
+        [products, category, categories] = await Promise.all([
             getProductsByCategoryId(id),
             getCategoryById(id),
+            getCategories(),
         ]);
     } catch {
         notFound();
@@ -48,6 +52,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                 </div>
 
                 <ProductGrid products={products} />
+                <CategoryList categories={categories} activeCategoryId={category.id} />
             </section>
         </main>
     );
