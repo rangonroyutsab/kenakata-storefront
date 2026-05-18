@@ -3,6 +3,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import type { Metadata } from "next";
 import { Literata, Nunito_Sans } from "next/font/google";
 import "./globals.css";
+import { AuthProvider } from "@/components/AuthProvider";
 import { CartProvider } from "@/components/CartProvider";
 
 const literata = Literata({
@@ -35,11 +36,13 @@ export default function RootLayout({
       <body
         className="flex min-h-screen flex-col bg-background text-on-surface antialiased"
       >
-        <CartProvider>
-          <SiteHeader />
-          <div className="flex-1">{children}</div>
-          <SiteFooter />
-        </CartProvider>
+        <AuthProvider>
+          <CartProvider>
+            <SiteHeader />
+            <div className="flex-1">{children}</div>
+            <SiteFooter />
+          </CartProvider>
+        </AuthProvider>
       </body>
     </html>
   );
