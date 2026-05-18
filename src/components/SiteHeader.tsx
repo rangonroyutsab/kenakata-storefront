@@ -17,7 +17,7 @@ const navigation = [
 
 export function SiteHeader() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const { items } = useCart();
+    const { items, openCart } = useCart();
     const pathname = usePathname();
 
     const cartCount = items.reduce((total, item) => total + item.quantity, 0);
@@ -70,10 +70,11 @@ export function SiteHeader() {
                     <IconButton label="Toggle theme">
                         <Sun size={20} />
                     </IconButton>
-                    <Link
-                        href="/cart"
+                    <button
                         aria-label="Open cart"
                         className="relative inline-flex h-10 w-10 items-center justify-center rounded-full text-[var(--primary)] transition hover:bg-[var(--surface-container-low)] active:scale-95"
+                        onClick={openCart}
+                        type="button"
                     >
                         <ShoppingCart size={20} />
                         {cartCount > 0 ? (
@@ -84,7 +85,7 @@ export function SiteHeader() {
                                 {cartCount}
                             </span>
                         ) : null}
-                    </Link>
+                    </button>
                     <Link
                         href="/account"
                         aria-label="Account"

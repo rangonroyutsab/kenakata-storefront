@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ShoppingBag } from "lucide-react";
 
+import { AddToCartIconButton } from "@/components/AddToCartIconButton";
 import { formatMoney, getProductHref, getProductImage } from "@/lib/commerce";
 import type { Product } from "@/types/product";
 
@@ -14,8 +14,8 @@ export function ProductCard({ product }: ProductCardProps) {
 
   return (
     <article className="group overflow-hidden rounded-xl border border-[var(--outline-variant)]/20 bg-[var(--surface-container-lowest)] shadow-soft transition hover:-translate-y-1">
-      <Link href={getProductHref(product)} className="block">
-        <div className="relative aspect-[3/4] bg-[var(--surface-container-high)]">
+      <div className="relative aspect-[3/4] bg-[var(--surface-container-high)]">
+        <Link href={getProductHref(product)} className="block h-full">
           {imageUrl ? (
             <Image
               src={imageUrl}
@@ -29,12 +29,11 @@ export function ProductCard({ product }: ProductCardProps) {
               No image available
             </div>
           )}
-          <span className="absolute bottom-4 right-4 inline-flex h-11 w-11 items-center justify-center rounded-full bg-[var(--surface)]/90 text-[var(--primary)] opacity-0 shadow-soft backdrop-blur transition group-hover:opacity-100">
-            <ShoppingBag size={20} />
-          </span>
-        </div>
+        </Link>
+        <AddToCartIconButton product={product} />
+      </div>
 
-        <div className="p-4">
+      <Link href={getProductHref(product)} className="block p-4">
           <p className="mb-2 text-sm text-[var(--on-surface-variant)]">
             {product.category.name}
           </p>
@@ -46,7 +45,6 @@ export function ProductCard({ product }: ProductCardProps) {
           <p className="mt-3 text-base font-bold text-[var(--primary)]">
             {formatMoney(product.price)}
           </p>
-        </div>
       </Link>
     </article>
   );
