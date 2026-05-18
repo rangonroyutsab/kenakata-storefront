@@ -32,6 +32,10 @@ export function ProductCard({ product }: ProductCardProps) {
         </div>
 
         <div className="p-4">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+            {product.category.name}
+          </p>
+
           <h2 className="line-clamp-2 text-base font-semibold">
             {product.title}
           </h2>
