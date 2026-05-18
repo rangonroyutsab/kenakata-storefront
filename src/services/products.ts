@@ -13,21 +13,33 @@ export async function getProducts(): Promise<Product[]> {
 }
 
 export async function getProductById(id: string): Promise<Product> {
-  const response = await fetch(`${API_BASE_URL}/products/${id}`);
+    const response = await fetch(`${API_BASE_URL}/products/${id}`);
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch product");
-  }
+    if (!response.ok) {
+        throw new Error("Failed to fetch product");
+    }
 
-  return response.json();
+    return response.json();
 }
 
 export async function getCategories(): Promise<Category[]> {
-  const response = await fetch(`${API_BASE_URL}/categories`);
+    const response = await fetch(`${API_BASE_URL}/categories`);
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch categories");
-  }
+    if (!response.ok) {
+        throw new Error("Failed to fetch categories");
+    }
 
-  return response.json();
+    return response.json();
+}
+
+export async function getProductsByCategoryId(
+    categoryId: string
+): Promise<Product[]> {
+    const response = await fetch(`${API_BASE_URL}/categories/${categoryId}/products`);
+
+    if (!response.ok) {
+        throw new Error("Failed to fetch category products");
+    }
+
+    return response.json();
 }
