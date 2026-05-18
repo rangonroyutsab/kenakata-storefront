@@ -59,4 +59,23 @@ https://api.escuelajs.co/api/v1
 
 ## Current Status
 
-This project is under active development as part of an internship assignment.
+Core storefront foundation is complete.
+
+Completed so far:
+
+- Project setup with Next.js, TypeScript, Tailwind CSS, and App Router
+- Product listing page
+- Reusable product card and product grid components
+- Product detail pages with dynamic routing
+- Product images using Next.js Image
+- Loading, error, empty, and 404 states
+- Basic site header and footer
+- Stable local development setup using Webpack mode
+
+Upcoming work:
+
+- Improve visual design
+- Add category browsing
+- Add product search/filtering
+- Add cart UI and cart state
+- Prepare deployment
