@@ -1,6 +1,7 @@
 import { HomeHero } from "@/components/HomeHero";
 import { ProductGrid } from "@/components/ProductGrid";
 import { getProducts } from "@/services/products";
+import { HOME_PRODUCT_LIMIT } from "@/constants/api";
 
 export default async function Home() {
   const products = await getProducts();
@@ -9,7 +10,7 @@ export default async function Home() {
     <main className="bg-white px-6 py-12 text-slate-950">
       <section className="mx-auto max-w-6xl">
         <HomeHero />
-        <ProductGrid products={products.slice(0, 8)} />
+        <ProductGrid products={products.slice(0, HOME_PRODUCT_LIMIT)} />
       </section>
     </main>
   );
