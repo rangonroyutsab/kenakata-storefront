@@ -1,4 +1,4 @@
-import { ProductCard } from "@/components/ProductCard";
+import { ProductGrid } from "@/components/ProductGrid";
 import { getProducts } from "@/services/products";
 
 export default async function Home() {
@@ -20,11 +20,7 @@ export default async function Home() {
             Browse products fetched from the Platzi Fake API.
           </p>
         </div>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {products.slice(0, 8).map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
+        <ProductGrid products={products.slice(0, 8)} />
       </section>
     </main>
   )
