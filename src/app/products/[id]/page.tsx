@@ -1,6 +1,7 @@
-import { getProductById } from "@/services/products";
 import Link from "next/link";
 import Image from "next/image";
+import { getProductById } from "@/services/products";
+import { notFound } from "next/navigation";
 
 type ProductPageProps = {
   params: Promise<{
@@ -10,7 +11,15 @@ type ProductPageProps = {
 
 export default async function ProductPage({ params }: ProductPageProps) {
   const { id } = await params;
-  const product = await getProductById(id);
+
+  let product;
+
+  try {
+    product = await getProductById(id);
+  } catch {
+    notFound();
+  }
+
   const imageUrl = product.images.find(
     (image) => image.startsWith("https://") && !image.includes("placehold.co")
   );
@@ -24,6 +33,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
         >
           Back to products
         </Link>
+
         <div className="grid gap-10 lg:grid-cols-2 lg:items-start">
           <div className="relative aspect-square overflow-hidden rounded-3xl bg-slate-100">
             {imageUrl ? (
