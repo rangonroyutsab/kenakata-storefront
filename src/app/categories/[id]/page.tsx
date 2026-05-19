@@ -1,14 +1,17 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
+
+import { CategoryList } from "@/components/CategoryList";
+import { SearchableProductSection } from "@/components/SearchableProductSection";
+import { getDisplayCategories } from "@/lib/commerce";
 import {
     getCategories,
     getCategoryById,
     getProductsByCategoryId,
 } from "@/services/products";
-import { CategoryList } from "@/components/CategoryList";
-import { SearchableProductSection } from "@/components/SearchableProductSection";
-import { getDisplayCategories } from "@/lib/commerce";
+import type { Category, Product } from "@/types/product";
 
 type CategoryPageProps = {
     params: Promise<{
@@ -17,6 +20,14 @@ type CategoryPageProps = {
 };
 
 export const revalidate = 1800;
+
+function includeActiveCategory(categories: Category[], activeCategory: Category) {
+    const hasActiveCategory = categories.some(
+        (category) => category.id === activeCategory.id
+    );
+
+    return hasActiveCategory ? categories : [activeCategory, ...categories];
+}
 
 export async function generateStaticParams() {
     const categories = await getCategories();
@@ -48,9 +59,9 @@ export async function generateMetadata({
 export default async function CategoryPage({ params }: CategoryPageProps) {
     const { id } = await params;
 
-    let products;
-    let category;
-    let categories;
+    let products: Product[];
+    let category: Category;
+    let categories: Category[];
 
     try {
         [products, category, categories] = await Promise.all([
@@ -62,26 +73,35 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         notFound();
     }
 
-    const visibleCategories = getDisplayCategories(categories);
+    const visibleCategories = includeActiveCategory(
+        getDisplayCategories(categories),
+        category
+    );
 
     return (
-        <main className="bg-white px-6 py-12 text-slate-950">
-            <section className="mx-auto max-w-6xl">
+        <main className="min-h-screen bg-[var(--background)] px-6 py-12 text-[var(--on-surface)] lg:px-12">
+            <section className="mx-auto max-w-7xl">
                 <Link
-                    href="/"
-                    className="mb-8 inline-flex text-sm font-semibold text-slate-600 transition hover:text-slate-950"
+                    href="/shop"
+                    className="mb-8 inline-flex items-center gap-2 text-sm font-bold text-[var(--primary)] transition hover:text-[var(--primary-strong)]"
                 >
-                    ← Back to products
+                    <ArrowLeft size={17} />
+                    Back to shop
                 </Link>
 
-                <div className="mb-10">
-                    <p className="mb-3 text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">
+                <div className="mb-8 max-w-3xl">
+                    <p className="mb-3 text-sm font-bold uppercase text-[var(--primary)]">
                         Category
                     </p>
 
-                    <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
+                    <h1 className="font-headline text-4xl font-bold lg:text-5xl">
                         {category.name}
                     </h1>
+
+                    <p className="mt-4 text-lg text-[var(--on-surface-variant)]">
+                        Browse products in this category, then search or sort the
+                        results to narrow your selection.
+                    </p>
                 </div>
 
                 <CategoryList
@@ -93,7 +113,6 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                     products={products}
                     placeholder={`Search ${category.name} products...`}
                 />
-
             </section>
         </main>
     );

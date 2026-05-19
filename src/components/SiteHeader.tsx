@@ -12,7 +12,6 @@ import { IconButton } from "@/components/ui/IconButton";
 const navigation = [
     { href: "/", label: "Home" },
     { href: "/shop", label: "Shop" },
-    { href: "/collections", label: "Collections" },
     { href: "/about", label: "About Us" },
 ];
 
@@ -31,10 +30,6 @@ export function SiteHeader() {
 
         if (href === "/shop") {
             return pathname.startsWith("/shop") || pathname.startsWith("/products");
-        }
-
-        if (href === "/collections") {
-            return pathname.startsWith("/collections") || pathname.startsWith("/categories");
         }
 
         return pathname.startsWith(href);

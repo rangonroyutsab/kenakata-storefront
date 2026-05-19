@@ -35,7 +35,7 @@ commerce helpers live in `src/lib`, API access lives in `src/services`, shared
 types live in `src/types`, and platform constants live in `src/constants`.
 
 Server components are used for catalog pages that can fetch before rendering:
-home, shop, collections, category pages, product details, and store locator.
+home, shop, category pages, product details, and store locator.
 Client components are used where browser state or interaction is required:
 cart persistence, auth persistence, checkout form validation, search/filter UI,
 theme switching, and add-to-cart controls.
@@ -47,7 +47,7 @@ theme switching, and add-to-cart controls.
   data.
 - SSG for known catalog paths: `generateStaticParams` prebuilds the initial
   product and category detail paths.
-- ISR for public catalog data: home, shop, collections, product, category, and
+- ISR for public catalog data: home, shop, product, category, and
   store locator routes export `revalidate` values so public API data remains
   cached but refreshes regularly.
 - SSR/on-demand rendering: paginated shop routes and uncached dynamic catalog

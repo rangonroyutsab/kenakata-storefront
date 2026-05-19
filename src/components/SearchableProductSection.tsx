@@ -60,20 +60,20 @@ export function SearchableProductSection({
 
   return (
     <>
-      <div className="mb-8 grid gap-4 md:grid-cols-[1fr_auto] md:items-center">
+      <div className="mb-8 grid gap-4 md:grid-cols-[minmax(0,1fr)_auto] md:items-end">
         <SearchInput
           placeholder={placeholder}
           value={query}
           onChange={setQuery}
         />
 
-        <label className="flex flex-col gap-2 text-sm font-medium text-slate-700">
+        <label className="flex flex-col gap-2 text-sm font-semibold text-[var(--on-surface-variant)]">
           <span>Sort by</span>
 
           <select
             value={sortOption}
             onChange={(event) => setSortOption(event.target.value as SortOption)}
-            className="rounded-full border border-slate-200 bg-white px-4 py-3 text-sm text-slate-950 outline-none transition focus:border-slate-950"
+            className="rounded-full border border-[var(--outline-variant)] bg-[var(--surface-container-lowest)] px-4 py-3 text-sm text-[var(--on-surface)] outline-none transition focus:border-[var(--primary)]"
           >
             <option value="default">Default</option>
             <option value="price-low">Price: low to high</option>

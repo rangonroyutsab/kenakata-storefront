@@ -50,7 +50,23 @@ async function requestJson<T>(path: string, options: RequestOptions = {}): Promi
     });
 
     if (!response.ok) {
-        throw new Error(`API request failed: ${response.status} ${response.statusText}`);
+        let message = `API request failed: ${response.status} ${response.statusText}`;
+
+        try {
+            const errorBody = await response.json();
+            const errorMessage =
+                typeof errorBody.message === "string"
+                    ? errorBody.message
+                    : Array.isArray(errorBody.message)
+                        ? errorBody.message.join(" ")
+                        : undefined;
+
+            message = errorMessage || errorBody.error || message;
+        } catch {
+            // Keep the status-based message if the API does not return JSON.
+        }
+
+        throw new Error(message);
     }
 
     return response.json();

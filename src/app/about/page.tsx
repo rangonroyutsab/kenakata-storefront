@@ -12,7 +12,7 @@ export default function AboutPage() {
     <StaticInfoPage
       eyebrow="About KenaKata"
       title="A modern demo storefront"
-      body="KenaKata is an e-commerce storefront prototype built to demonstrate product browsing, category collections, cart management, demo authentication, and mock checkout using the Platzi Fake Store API."
+      body="KenaKata is an e-commerce storefront prototype built to demonstrate product browsing, category filtering, cart management, demo authentication, and mock checkout using the Platzi Fake Store API."
     />
   );
 }

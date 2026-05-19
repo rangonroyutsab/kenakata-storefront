@@ -18,6 +18,7 @@ export default function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [error, setError] = useState("");
 
   function getNextPath() {
@@ -25,24 +26,53 @@ export default function SignupPage() {
     return requestedPath?.startsWith("/") ? requestedPath : "/account";
   }
 
+  function validateForm() {
+    const nextErrors: Record<string, string> = {};
+    const trimmedName = name.trim();
+    const trimmedEmail = email.trim();
+
+    if (!trimmedName) {
+      nextErrors.name = "Full name is required.";
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
+      nextErrors.email = "Enter a valid email address.";
+    }
+
+    if (password.length < 4) {
+      nextErrors.password = "Password must be at least 4 characters.";
+    }
+
+    if (confirmPassword !== password) {
+      nextErrors.confirmPassword = "Passwords do not match.";
+    }
+
+    setFieldErrors(nextErrors);
+
+    return {
+      isValid: Object.keys(nextErrors).length === 0,
+      trimmedEmail,
+      trimmedName,
+    };
+  }
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
+    const { isValid, trimmedEmail, trimmedName } = validateForm();
 
-    if (password !== confirmPassword) {
-      setError("Passwords do not match.");
+    if (!isValid) {
       return;
     }
 
     try {
       await signup({
-        name,
-        email,
+        name: trimmedName,
+        email: trimmedEmail,
         password,
         avatar: DEFAULT_AVATAR,
       });
-      const nextPath = getNextPath();
-      router.push(`/login?signup=success&next=${encodeURIComponent(nextPath)}`);
+      router.push(getNextPath());
     } catch (caughtError) {
       setError(
         caughtError instanceof Error
@@ -75,38 +105,61 @@ export default function SignupPage() {
 
           <form className="space-y-5" onSubmit={handleSubmit}>
             <FormField
+              error={fieldErrors.name}
               label="Full Name"
-              onChange={(event) => setName(event.target.value)}
+              onChange={(event) => {
+                setName(event.target.value);
+                setFieldErrors((current) => ({ ...current, name: "" }));
+              }}
               placeholder="Jane Doe"
               required
               type="text"
               value={name}
             />
             <FormField
+              error={fieldErrors.email}
               label="Email Address"
-              onChange={(event) => setEmail(event.target.value)}
+              onChange={(event) => {
+                setEmail(event.target.value);
+                setFieldErrors((current) => ({ ...current, email: "" }));
+              }}
               placeholder="jane@example.com"
               required
               type="email"
               value={email}
             />
             <FormField
+              error={fieldErrors.password}
               label="Password"
               minLength={4}
-              onChange={(event) => setPassword(event.target.value)}
+              onChange={(event) => {
+                setPassword(event.target.value);
+                setFieldErrors((current) => ({
+                  ...current,
+                  password: "",
+                  confirmPassword: "",
+                }));
+              }}
               required
               type="password"
               value={password}
             />
             <FormField
               error={
-                confirmPassword && password !== confirmPassword
+                fieldErrors.confirmPassword ||
+                (confirmPassword && password !== confirmPassword
                   ? "Passwords do not match."
-                  : undefined
+                  : undefined)
               }
               label="Confirm Password"
               minLength={4}
-              onChange={(event) => setConfirmPassword(event.target.value)}
+              onChange={(event) => {
+                setConfirmPassword(event.target.value);
+                setFieldErrors((current) => ({
+                  ...current,
+                  confirmPassword: "",
+                }));
+              }}
               required
               type="password"
               value={confirmPassword}
@@ -117,7 +170,7 @@ export default function SignupPage() {
               </p>
             ) : null}
             <Button className="w-full py-4 text-base" disabled={isLoading}>
-              {isLoading ? "Creating..." : "Create Account"}
+              {isLoading ? "Creating account..." : "Create Account"}
               <ArrowRight size={18} />
             </Button>
           </form>

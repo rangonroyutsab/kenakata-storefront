@@ -3,7 +3,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 import {
-  checkEmailAvailability,
   createUser,
   getProfile,
   login as loginRequest,
@@ -111,15 +110,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(profile);
   }
 
+  async function authenticate(input: LoginInput) {
+    const nextTokens = await loginRequest(input);
+    const profile = await getProfile(nextTokens.access_token);
+    setAuthCookie(nextTokens.access_token);
+    setTokens(nextTokens);
+    setUser(profile);
+  }
+
   async function login(input: LoginInput) {
     setIsSubmitting(true);
 
     try {
-      const nextTokens = await loginRequest(input);
-      const profile = await getProfile(nextTokens.access_token);
-      setAuthCookie(nextTokens.access_token);
-      setTokens(nextTokens);
-      setUser(profile);
+      await authenticate(input);
     } finally {
       setIsSubmitting(false);
     }
@@ -129,13 +132,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setIsSubmitting(true);
 
     try {
-      const availability = await checkEmailAvailability(input.email);
-
-      if (!availability.isAvailable) {
-        throw new Error("This email is already registered.");
-      }
-
       await createUser(input);
+      await authenticate({
+        email: input.email,
+        password: input.password,
+      });
     } finally {
       setIsSubmitting(false);
     }
