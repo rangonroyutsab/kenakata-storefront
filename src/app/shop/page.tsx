@@ -12,6 +12,8 @@ type ShopPageProps = {
 
 const PRODUCTS_PER_PAGE = 12;
 
+export const revalidate = 1800;
+
 export const metadata: Metadata = {
   title: "Shop",
   description:

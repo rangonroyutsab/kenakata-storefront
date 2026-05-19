@@ -1,4 +1,9 @@
-import { API_BASE_URL } from "@/constants/api";
+import {
+    API_BASE_URL,
+    CACHE_TAGS,
+    CATALOG_REVALIDATE_SECONDS,
+    STORE_LOCATIONS_REVALIDATE_SECONDS,
+} from "@/constants/api";
 import type {
     AuthProfile,
     AuthTokens,
@@ -13,6 +18,10 @@ import type {
 } from "@/types/product";
 
 type RequestOptions = RequestInit & {
+    next?: {
+        revalidate?: number | false;
+        tags?: string[];
+    };
     token?: string;
 };
 
@@ -60,7 +69,12 @@ function productQueryToParams(query?: ProductQuery) {
 
 export async function getProducts(query?: ProductQuery): Promise<Product[]> {
     const url = buildUrl("/products", productQueryToParams(query));
-    const response = await fetch(url);
+    const response = await fetch(url, {
+        next: {
+            revalidate: CATALOG_REVALIDATE_SECONDS,
+            tags: [CACHE_TAGS.products],
+        },
+    });
 
     if (!response.ok) {
         throw new Error("Failed to fetch products");
@@ -70,7 +84,12 @@ export async function getProducts(query?: ProductQuery): Promise<Product[]> {
 }
 
 export async function getProductById(id: string): Promise<Product> {
-    const response = await fetch(`${API_BASE_URL}/products/${id}`);
+    const response = await fetch(`${API_BASE_URL}/products/${id}`, {
+        next: {
+            revalidate: CATALOG_REVALIDATE_SECONDS,
+            tags: [CACHE_TAGS.products, `${CACHE_TAGS.products}:${id}`],
+        },
+    });
 
     if (!response.ok) {
         throw new Error("Failed to fetch product");
@@ -80,7 +99,12 @@ export async function getProductById(id: string): Promise<Product> {
 }
 
 export async function getProductBySlug(slug: string): Promise<Product> {
-    const response = await fetch(`${API_BASE_URL}/products/slug/${slug}`);
+    const response = await fetch(`${API_BASE_URL}/products/slug/${slug}`, {
+        next: {
+            revalidate: CATALOG_REVALIDATE_SECONDS,
+            tags: [CACHE_TAGS.products, `${CACHE_TAGS.products}:slug:${slug}`],
+        },
+    });
 
     if (!response.ok) {
         throw new Error("Failed to fetch product by slug");
@@ -102,7 +126,12 @@ export async function getProductBySlugOrId(slugOrId: string): Promise<Product> {
 }
 
 export async function getCategories(): Promise<Category[]> {
-    const response = await fetch(`${API_BASE_URL}/categories`);
+    const response = await fetch(`${API_BASE_URL}/categories`, {
+        next: {
+            revalidate: CATALOG_REVALIDATE_SECONDS,
+            tags: [CACHE_TAGS.categories],
+        },
+    });
 
     if (!response.ok) {
         throw new Error("Failed to fetch categories");
@@ -119,7 +148,16 @@ export async function getProductsByCategoryId(
         `/categories/${categoryId}/products`,
         productQueryToParams(query)
     );
-    const response = await fetch(url);
+    const response = await fetch(url, {
+        next: {
+            revalidate: CATALOG_REVALIDATE_SECONDS,
+            tags: [
+                CACHE_TAGS.products,
+                CACHE_TAGS.categories,
+                `${CACHE_TAGS.categories}:${categoryId}`,
+            ],
+        },
+    });
 
     if (!response.ok) {
         throw new Error("Failed to fetch category products");
@@ -129,7 +167,12 @@ export async function getProductsByCategoryId(
 }
 
 export async function getCategoryById(id: string): Promise<Category> {
-    const response = await fetch(`${API_BASE_URL}/categories/${id}`);
+    const response = await fetch(`${API_BASE_URL}/categories/${id}`, {
+        next: {
+            revalidate: CATALOG_REVALIDATE_SECONDS,
+            tags: [CACHE_TAGS.categories, `${CACHE_TAGS.categories}:${id}`],
+        },
+    });
 
     if (!response.ok) {
         throw new Error("Failed to fetch category");
@@ -140,6 +183,7 @@ export async function getCategoryById(id: string): Promise<Category> {
 
 export async function login(input: LoginInput): Promise<AuthTokens> {
     return requestJson<AuthTokens>("/auth/login", {
+        cache: "no-store",
         method: "POST",
         body: JSON.stringify(input),
     });
@@ -147,20 +191,26 @@ export async function login(input: LoginInput): Promise<AuthTokens> {
 
 export async function getProfile(accessToken: string): Promise<AuthProfile> {
     return requestJson<AuthProfile>("/auth/profile", {
+        cache: "no-store",
         token: accessToken,
     });
 }
 
 export async function getUsers(): Promise<User[]> {
-    return requestJson<User[]>("/users");
+    return requestJson<User[]>("/users", {
+        cache: "no-store",
+    });
 }
 
 export async function getUserById(id: string | number): Promise<User> {
-    return requestJson<User>(`/users/${id}`);
+    return requestJson<User>(`/users/${id}`, {
+        cache: "no-store",
+    });
 }
 
 export async function createUser(input: CreateUserInput): Promise<User> {
     return requestJson<User>("/users", {
+        cache: "no-store",
         method: "POST",
         body: JSON.stringify(input),
     });
@@ -170,6 +220,7 @@ export async function checkEmailAvailability(
     email: string
 ): Promise<EmailAvailability> {
     return requestJson<EmailAvailability>("/users/is-available", {
+        cache: "no-store",
         method: "POST",
         body: JSON.stringify({ email }),
     });
@@ -179,7 +230,12 @@ export async function getLocations(
     origin?: string
 ): Promise<StoreLocation[]> {
     const url = buildUrl("/locations", { origin });
-    const response = await fetch(url);
+    const response = await fetch(url, {
+        next: {
+            revalidate: STORE_LOCATIONS_REVALIDATE_SECONDS,
+            tags: [CACHE_TAGS.locations],
+        },
+    });
 
     if (!response.ok) {
         throw new Error("Failed to fetch locations");

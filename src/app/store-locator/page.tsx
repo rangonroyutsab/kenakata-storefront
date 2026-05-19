@@ -9,6 +9,8 @@ export const metadata: Metadata = {
   description: "Find KenaKata pickup points using the Platzi Fake Store locations API.",
 };
 
+export const revalidate = 3600;
+
 export default async function StoreLocatorPage() {
   let locations: StoreLocation[] = [];
 

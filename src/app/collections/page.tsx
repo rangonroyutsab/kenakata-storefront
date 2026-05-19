@@ -10,6 +10,8 @@ export const metadata: Metadata = {
   description: "Browse KenaKata product collections by category.",
 };
 
+export const revalidate = 1800;
+
 export default async function CollectionsPage() {
   const categories = await getCategories();
 

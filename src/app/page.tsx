@@ -6,18 +6,22 @@ import { HomeHero } from "@/components/HomeHero";
 import { ProductGrid } from "@/components/ProductGrid";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { getCategories, getProducts } from "@/services/products";
-import { HOME_PRODUCT_LIMIT, VISIBLE_CATEGORY_NAMES } from "@/constants/api";
-import { getProductImage } from "@/lib/commerce";
+import { HOME_CATEGORY_PRODUCT_LIMIT, HOME_PRODUCT_LIMIT } from "@/constants/api";
+import { getDisplayCategories, getProductImage } from "@/lib/commerce";
+
+export const revalidate = 1800;
 
 export default async function Home() {
-  const [products, categories] = await Promise.all([
+  const [products, categories, categoryProducts] = await Promise.all([
     getProducts({ offset: 0, limit: HOME_PRODUCT_LIMIT }),
     getCategories(),
+    getProducts({ offset: 0, limit: HOME_CATEGORY_PRODUCT_LIMIT }),
   ]);
 
-  const visibleCategories = categories.filter((category) =>
-    VISIBLE_CATEGORY_NAMES.includes(category.name)
-  );
+  const visibleCategories = getDisplayCategories(categories, {
+    limit: 4,
+    products: categoryProducts,
+  });
 
   return (
     <main className="bg-[var(--background)] text-[var(--on-surface)]">

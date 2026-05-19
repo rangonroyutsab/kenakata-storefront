@@ -7,14 +7,24 @@ import {
     getProductsByCategoryId,
 } from "@/services/products";
 import { CategoryList } from "@/components/CategoryList";
-import { VISIBLE_CATEGORY_NAMES } from "@/constants/api";
 import { SearchableProductSection } from "@/components/SearchableProductSection";
+import { getDisplayCategories } from "@/lib/commerce";
 
 type CategoryPageProps = {
     params: Promise<{
         id: string;
     }>;
 };
+
+export const revalidate = 1800;
+
+export async function generateStaticParams() {
+    const categories = await getCategories();
+
+    return categories.map((category) => ({
+        id: String(category.id),
+    }));
+}
 
 export async function generateMetadata({
     params,
@@ -52,9 +62,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         notFound();
     }
 
-    const visibleCategories = categories.filter((category) =>
-        VISIBLE_CATEGORY_NAMES.includes(category.name)
-    );
+    const visibleCategories = getDisplayCategories(categories);
 
     return (
         <main className="bg-white px-6 py-12 text-slate-950">

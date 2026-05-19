@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ProductDetailView } from "@/components/ProductDetailView";
 import {
   getProductBySlugOrId,
+  getProducts,
   getProductsByCategoryId,
 } from "@/services/products";
 
@@ -12,6 +13,16 @@ type ProductPageProps = {
     id: string;
   }>;
 };
+
+export const revalidate = 1800;
+
+export async function generateStaticParams() {
+  const products = await getProducts({ offset: 0, limit: 24 });
+
+  return products.map((product) => ({
+    id: product.slug || String(product.id),
+  }));
+}
 
 export async function generateMetadata({
   params,
