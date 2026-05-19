@@ -5,6 +5,7 @@ import { Literata, Nunito_Sans } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/components/AuthProvider";
 import { CartProvider } from "@/components/CartProvider";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 const literata = Literata({
   variable: "--font-headline",
@@ -40,13 +41,15 @@ export default function RootLayout({
       <body
         className="flex min-h-screen flex-col bg-background text-on-surface antialiased"
       >
-        <AuthProvider>
-          <CartProvider>
-            <SiteHeader />
-            <div className="flex-1">{children}</div>
-            <SiteFooter />
-          </CartProvider>
-        </AuthProvider>
+        <ThemeProvider>
+          <AuthProvider>
+            <CartProvider>
+              <SiteHeader />
+              <div className="flex-1">{children}</div>
+              <SiteFooter />
+            </CartProvider>
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

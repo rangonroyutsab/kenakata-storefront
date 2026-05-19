@@ -3,9 +3,10 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Leaf, Menu, ShoppingCart, Sun, User, X } from "lucide-react";
+import { Leaf, Menu, Moon, ShoppingCart, Sun, User, X } from "lucide-react";
 
 import { useCart } from "@/components/CartProvider";
+import { useTheme } from "@/components/ThemeProvider";
 import { IconButton } from "@/components/ui/IconButton";
 
 const navigation = [
@@ -18,6 +19,7 @@ const navigation = [
 export function SiteHeader() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const { items, openCart } = useCart();
+    const { theme, toggleTheme } = useTheme();
     const pathname = usePathname();
 
     const cartCount = items.reduce((total, item) => total + item.quantity, 0);
@@ -67,8 +69,11 @@ export function SiteHeader() {
                 </nav>
 
                 <div className="flex items-center gap-1">
-                    <IconButton label="Toggle theme">
-                        <Sun size={20} />
+                    <IconButton
+                        label={`Switch to ${theme === "light" ? "dark" : "light"} theme`}
+                        onClick={toggleTheme}
+                    >
+                        {theme === "light" ? <Sun size={20} /> : <Moon size={20} />}
                     </IconButton>
                     <button
                         aria-label="Open cart"
