@@ -20,6 +20,7 @@ Tailwind CSS, and the Platzi Fake Store API.
 - Search, sort, category, price filtering, desktop filters, and mobile filter sheet
 - Persistent cart with desktop drawer, mobile sheet, and full cart page
 - Fake API login, profile fetch, signup, and email availability validation
+- Middleware-protected account and checkout routes
 - Account page with fake API profile and demo order context
 - Local mock checkout, order confirmation, and cart clearing
 - Store locator backed by `GET /locations`
@@ -52,9 +53,8 @@ theme switching, and add-to-cart controls.
 - SSR/on-demand rendering: paginated shop routes and uncached dynamic catalog
   paths are rendered on demand and then reused according to the revalidation
   window.
-- Client-only protection: account and checkout render static shells, then check
-  local auth state in the browser. Middleware protection is a planned hardening
-  step.
+- Middleware protection: account and checkout routes are guarded before render.
+  Unauthenticated users are redirected to `/login?next=...`.
 
 ## Caching and Revalidation
 
@@ -75,8 +75,9 @@ Current public cache windows:
   does not provide order or payment resources.
 - Search and sorting run on the currently loaded page of products, while
   category and pagination use API-backed routes.
-- Client-side auth persistence keeps the demo simple, but middleware-based route
-  protection should be added before treating this as production auth.
+- Auth persistence uses local storage plus a client-written cookie so middleware
+  can protect routes. A production version should move this to an HTTP-only
+  secure cookie set by a server route or auth provider.
 
 ## Performance Considerations
 
@@ -93,12 +94,12 @@ Current public cache windows:
   placeholder values and allows several remote hosts.
 - The API does not include real cart, order, or payment resources, so checkout
   is intentionally mocked.
-- Auth tokens are available only in the browser for this MVP, which limits true
-  server-side route protection.
+- The fake API returns browser-managed auth tokens, so middleware protection uses
+  a client-written cookie for this demo.
 
 ## Future Improvements
 
-- Add middleware-backed protected routes with cookie-based auth.
+- Replace the demo auth cookie with an HTTP-only secure cookie flow.
 - Add Vitest or Playwright coverage for cart, checkout, and product filtering.
 - Add admin CRUD for products, categories, and users.
 - Add wishlist/reviews and API-backed product search across the full catalog.

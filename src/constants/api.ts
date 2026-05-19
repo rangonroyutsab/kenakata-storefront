@@ -1,4 +1,6 @@
 export const API_BASE_URL = "https://api.escuelajs.co/api/v1";
+export const AUTH_COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24;
+export const AUTH_COOKIE_NAME = "kenakata-auth-token";
 export const HOME_CATEGORY_PRODUCT_LIMIT = 60;
 export const HOME_PRODUCT_LIMIT = 8;
 export const CATALOG_REVALIDATE_SECONDS = 1800;

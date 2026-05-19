@@ -8,6 +8,10 @@ import {
   getProfile,
   login as loginRequest,
 } from "@/services/products";
+import {
+  AUTH_COOKIE_MAX_AGE_SECONDS,
+  AUTH_COOKIE_NAME,
+} from "@/constants/api";
 import type {
   AuthProfile,
   AuthTokens,
@@ -28,6 +32,16 @@ type AuthContextValue = {
 const AuthContext = createContext<AuthContextValue | null>(null);
 const TOKEN_STORAGE_KEY = "kenakata-auth-tokens";
 const PROFILE_STORAGE_KEY = "kenakata-auth-profile";
+
+function setAuthCookie(accessToken: string) {
+  document.cookie = `${AUTH_COOKIE_NAME}=${encodeURIComponent(
+    accessToken
+  )}; path=/; max-age=${AUTH_COOKIE_MAX_AGE_SECONDS}; SameSite=Lax`;
+}
+
+function clearAuthCookie() {
+  document.cookie = `${AUTH_COOKIE_NAME}=; path=/; max-age=0; SameSite=Lax`;
+}
 
 function parseStoredJson<T>(value: string | null): T | null {
   if (!value) {
@@ -69,8 +83,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     if (tokens) {
       window.localStorage.setItem(TOKEN_STORAGE_KEY, JSON.stringify(tokens));
+      setAuthCookie(tokens.access_token);
     } else {
       window.localStorage.removeItem(TOKEN_STORAGE_KEY);
+      clearAuthCookie();
     }
   }, [hasHydrated, tokens]);
 
@@ -101,6 +117,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const nextTokens = await loginRequest(input);
       const profile = await getProfile(nextTokens.access_token);
+      setAuthCookie(nextTokens.access_token);
       setTokens(nextTokens);
       setUser(profile);
     } finally {
@@ -125,6 +142,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   function logout() {
+    clearAuthCookie();
     setTokens(null);
     setUser(null);
   }
