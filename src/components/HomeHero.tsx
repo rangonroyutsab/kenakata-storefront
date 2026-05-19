@@ -12,20 +12,20 @@ export function HomeHero({ imageUrl }: HomeHeroProps) {
     <section className="grid items-center gap-12 py-12 lg:grid-cols-2 lg:gap-24 lg:py-20">
       <div>
         <h1 className="font-headline max-w-xl text-5xl font-bold leading-tight text-[var(--on-surface)] sm:text-6xl lg:text-7xl">
-          Artisanal
+          Shop Quality
           <br />
-          Home Goods
+          Products Online
         </h1>
         <p className="mt-6 max-w-md text-lg leading-relaxed text-[var(--on-surface-variant)]">
-          Rooted warmth for your living spaces. Discover carefully crafted
-          pieces designed to bring nature&apos;s calm into your daily life.
+          Discover products across popular categories, compare details quickly,
+          and add your favorites to a cart that stays ready when you return.
         </p>
         <ButtonLink
           href="/shop"
           variant="tertiary"
           className="mt-8 px-8 py-4 text-base"
         >
-          Shop the Collection
+          Shop Products
           <ArrowRight size={18} />
         </ButtonLink>
       </div>
@@ -43,7 +43,7 @@ export function HomeHero({ imageUrl }: HomeHeroProps) {
             />
           ) : (
             <div className="flex h-full items-center justify-center px-8 text-center text-[var(--on-surface-variant)]">
-              Curated natural textures for the modern home.
+              Featured products from the latest catalog.
             </div>
           )}
         </div>

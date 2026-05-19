@@ -21,11 +21,11 @@ const nunitoSans = Nunito_Sans({
 
 export const metadata: Metadata = {
   title: {
-    default: "KenaKata | Rooted Warmth for Your Home",
+    default: "KenaKata | Online Shopping Made Simple",
     template: "%s | KenaKata",
   },
   description:
-    "Shop Terra-styled home goods with a modern Next.js storefront powered by the Platzi Fake Store API.",
+    "Shop products across popular categories with a modern Next.js storefront powered by the Platzi Fake Store API.",
 };
 
 export default function RootLayout({
@@ -37,6 +37,7 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${literata.variable} ${nunitoSans.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
       <body
         className="flex min-h-screen flex-col bg-background text-on-surface antialiased"

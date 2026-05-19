@@ -3,33 +3,41 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Leaf, Menu, Moon, ShoppingCart, Sun, User, X } from "lucide-react";
+import { Home, Menu, ShoppingBag, ShoppingCart, Sun, User, X } from "lucide-react";
 
 import { useCart } from "@/components/CartProvider";
 import { useTheme } from "@/components/ThemeProvider";
 import { IconButton } from "@/components/ui/IconButton";
 
 const navigation = [
+    { href: "/", label: "Home" },
     { href: "/shop", label: "Shop" },
-    { href: "/shop?collection=new", label: "Collections" },
-    { href: "/sustainability", label: "Sustainability" },
-    { href: "/journal", label: "Journal" },
+    { href: "/collections", label: "Collections" },
+    { href: "/about", label: "About Us" },
 ];
 
 export function SiteHeader() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const { items, openCart } = useCart();
-    const { theme, toggleTheme } = useTheme();
+    const { toggleTheme } = useTheme();
     const pathname = usePathname();
 
     const cartCount = items.reduce((total, item) => total + item.quantity, 0);
 
     function isActive(href: string) {
-        if (href === "/shop") {
-            return pathname === "/" || pathname.startsWith("/shop") || pathname.startsWith("/products") || pathname.startsWith("/categories");
+        if (href === "/") {
+            return pathname === "/";
         }
 
-        return pathname.startsWith(href.split("?")[0]);
+        if (href === "/shop") {
+            return pathname.startsWith("/shop") || pathname.startsWith("/products");
+        }
+
+        if (href === "/collections") {
+            return pathname.startsWith("/collections") || pathname.startsWith("/categories");
+        }
+
+        return pathname.startsWith(href);
     }
 
     return (
@@ -45,7 +53,7 @@ export function SiteHeader() {
                     href="/"
                     className="font-headline flex items-center gap-2 text-2xl font-bold tracking-tight text-[var(--on-surface)]"
                 >
-                    <Leaf className="text-[var(--primary)]" size={20} />
+                    <ShoppingBag className="text-[var(--primary)]" size={20} />
                     KenaKata
                 </Link>
 
@@ -70,10 +78,10 @@ export function SiteHeader() {
 
                 <div className="flex items-center gap-1">
                     <IconButton
-                        label={`Switch to ${theme === "light" ? "dark" : "light"} theme`}
+                        label="Toggle theme"
                         onClick={toggleTheme}
                     >
-                        {theme === "light" ? <Sun size={20} /> : <Moon size={20} />}
+                        <Sun size={20} />
                     </IconButton>
                     <button
                         aria-label="Open cart"
@@ -116,7 +124,7 @@ export function SiteHeader() {
                                     KenaKata
                                 </h2>
                                 <p className="mt-1 text-sm text-[var(--on-surface-variant)]">
-                                    Rooted Warmth for your Home
+                                    Online shopping made simple
                                 </p>
                             </div>
                             <IconButton label="Close menu" onClick={() => setIsMenuOpen(false)}>
@@ -136,6 +144,7 @@ export function SiteHeader() {
                                     key={item.href}
                                     onClick={() => setIsMenuOpen(false)}
                                 >
+                                    {item.href === "/" ? <Home size={18} /> : null}
                                     {item.label}
                                 </Link>
                             ))}
@@ -153,7 +162,7 @@ export function SiteHeader() {
                             href="/shop"
                             onClick={() => setIsMenuOpen(false)}
                         >
-                            Shop the Collection
+                            Shop Products
                         </Link>
                     </aside>
                 </div>

@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Leaf, PackageCheck, ShoppingBag, Sprout, Star } from "lucide-react";
+import { PackageCheck, RotateCcw, ShoppingBag, Star, Tag } from "lucide-react";
 
 import { useCart } from "@/components/CartProvider";
 import { Button } from "@/components/ui/Button";
@@ -101,7 +101,7 @@ export function ProductDetailView({
 
         <div className="lg:col-span-5 lg:pt-10">
           <p className="mb-4 flex items-center gap-2 text-sm font-bold text-[var(--primary)]">
-            <Leaf size={18} />
+            <Tag size={18} />
             {product.category.name}
           </p>
           <h1 className="font-headline text-4xl font-bold leading-tight lg:text-5xl">
@@ -162,7 +162,7 @@ export function ProductDetailView({
               <PackageCheck className="mt-1 text-[var(--primary)]" size={22} />
               <div>
                 <p className="font-bold text-[var(--on-surface)]">
-                  Free carbon-neutral shipping
+                  Free shipping on larger orders
                 </p>
                 <p className="text-sm">
                   On all orders over $100. Ships within 2-3 business days.
@@ -170,13 +170,13 @@ export function ProductDetailView({
               </div>
             </div>
             <div className="flex gap-4 text-[var(--on-surface-variant)]">
-              <Sprout className="mt-1 text-[var(--primary)]" size={22} />
+              <RotateCcw className="mt-1 text-[var(--primary)]" size={22} />
               <div>
                 <p className="font-bold text-[var(--on-surface)]">
-                  Rooted in Nature
+                  Easy returns
                 </p>
                 <p className="text-sm">
-                  Every purchase supports sustainable farming practices.
+                  Return eligible items within 30 days of delivery.
                 </p>
               </div>
             </div>

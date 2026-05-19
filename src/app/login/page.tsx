@@ -33,21 +33,8 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="grid min-h-screen bg-[var(--background)] lg:grid-cols-[5fr_7fr]">
-      <section className="relative hidden bg-[var(--surface-container)] lg:block">
-        <div className="absolute inset-0 bg-[var(--primary)]/10" />
-        <div className="absolute bottom-12 left-12 max-w-sm rounded-xl bg-[var(--surface-container-lowest)]/85 p-8 shadow-soft backdrop-blur-md">
-          <h1 className="font-headline text-3xl font-bold text-[var(--primary)]">
-            Rooted Warmth
-          </h1>
-          <p className="mt-3 text-[var(--on-surface-variant)]">
-            Welcome back to KenaKata. Reconnect with nature through our curated
-            collection of organic home goods.
-          </p>
-        </div>
-      </section>
-
-      <section className="flex items-center justify-center px-6 py-12">
+    <main className="min-h-screen bg-[var(--background)]">
+      <section className="flex min-h-screen items-center justify-center px-6 py-12">
         <div className="w-full max-w-md rounded-xl border border-[var(--outline-variant)]/20 bg-[var(--surface-container-lowest)] p-8 shadow-soft sm:p-10">
           <div className="mb-10 text-center">
             <Link

@@ -210,7 +210,7 @@ function CartDrawer({
                 onClick={closeCart}
                 type="button"
             />
-            <aside className="absolute inset-x-0 bottom-0 flex max-h-[85dvh] flex-col rounded-t-xl bg-[var(--surface)] shadow-soft sm:inset-y-0 sm:left-auto sm:right-0 sm:h-full sm:w-full sm:max-w-[440px] sm:rounded-l-xl sm:rounded-tr-none">
+            <aside className="absolute inset-x-0 bottom-0 flex max-h-[85dvh] flex-col rounded-t-xl bg-[var(--surface)] shadow-soft sm:inset-y-0 sm:left-auto sm:right-0 sm:h-full sm:max-h-none sm:w-full sm:max-w-[440px] sm:rounded-l-xl sm:rounded-tr-none">
                 <div className="border-b border-[var(--outline-variant)]/30 px-6 py-5">
                     <div className="mx-auto mb-4 h-1.5 w-12 rounded-full bg-[var(--surface-variant)] sm:hidden" />
                     <div className="flex items-center justify-between">
@@ -234,7 +234,7 @@ function CartDrawer({
                                 Your cart is empty
                             </h3>
                             <p className="mt-2 text-sm text-[var(--on-surface-variant)]">
-                                Add a few rooted comforts from the collection.
+                                Add products to your cart to review them here.
                             </p>
                         </div>
                     ) : (

@@ -29,7 +29,7 @@ export default function CartPage() {
               Your Cart
             </h1>
             <p className="mt-3 text-[var(--on-surface-variant)]">
-              Review your rooted comforts before checkout.
+              Review your selected products before checkout.
             </p>
           </div>
           {items.length > 0 ? (

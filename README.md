@@ -14,7 +14,7 @@ Tailwind CSS, and the Platzi Fake Store API.
 
 ## Features Completed
 
-- Terra "Rooted Warmth" visual system using Literata and Nunito Sans
+- Polished storefront visual system using Literata and Nunito Sans
 - API-backed homepage, shop pagination, categories, and product detail pages
 - Product slug/id support with related products by category
 - Search, sort, category, price filtering, desktop filters, and mobile filter sheet

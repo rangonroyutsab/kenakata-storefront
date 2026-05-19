@@ -1,7 +1,8 @@
 import Link from "next/link";
 
 const links = [
-  { href: "/sustainability", label: "Sustainability" },
+  { href: "/about", label: "About Us" },
+  { href: "/collections", label: "Collections" },
   { href: "/shipping-returns", label: "Shipping & Returns" },
   { href: "/privacy", label: "Privacy Policy" },
   { href: "/contact", label: "Contact Us" },
@@ -20,8 +21,8 @@ export function SiteFooter() {
             KenaKata
           </Link>
           <p className="mt-4 leading-relaxed">
-            Rooted warmth for your home. We believe in creating spaces that
-            breathe, using natural materials and artisanal craftsmanship.
+            Shop a curated selection of products with fast browsing, simple
+            checkout, and a reliable cart experience.
           </p>
         </div>
 
@@ -37,7 +38,7 @@ export function SiteFooter() {
           ))}
         </nav>
 
-        <p>© 2026 KenaKata. All rights reserved. Rooted in nature.</p>
+        <p>© 2026 KenaKata. All rights reserved.</p>
       </div>
     </footer>
   );

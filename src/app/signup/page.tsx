@@ -3,7 +3,7 @@
 import { FormEvent, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowRight, Leaf } from "lucide-react";
+import { ArrowRight, ShoppingBag } from "lucide-react";
 
 import { useAuth } from "@/components/AuthProvider";
 import { Button } from "@/components/ui/Button";
@@ -48,20 +48,13 @@ export default function SignupPage() {
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-[var(--background)] p-4 md:p-8">
-      <section className="grid w-full max-w-5xl overflow-hidden rounded-2xl border border-[var(--outline-variant)]/30 bg-[var(--surface-bright)] shadow-soft md:grid-cols-[45fr_55fr]">
-        <div className="relative hidden bg-[var(--surface-container-highest)] md:block">
-          <div className="absolute inset-0 bg-[var(--primary)]/10" />
-          <p className="font-headline absolute bottom-8 left-8 text-xl italic text-[var(--surface-bright)] drop-shadow">
-            Rooted Warmth for your Home
-          </p>
-        </div>
-        <div className="p-8 md:p-14">
+      <section className="w-full max-w-xl overflow-hidden rounded-2xl border border-[var(--outline-variant)]/30 bg-[var(--surface-bright)] p-8 shadow-soft md:p-14">
           <div className="mb-10">
             <Link
               className="mb-6 flex items-center gap-2 text-[var(--primary)]"
               href="/"
             >
-              <Leaf size={28} fill="currentColor" />
+              <ShoppingBag size={28} />
               <span className="font-headline text-2xl font-bold">
                 KenaKata
               </span>
@@ -70,7 +63,7 @@ export default function SignupPage() {
               Create an account
             </h1>
             <p className="mt-3 text-[var(--on-surface-variant)]">
-              Join our community and bring natural warmth into your space.
+              Create an account to save your profile and speed up checkout.
             </p>
           </div>
 
@@ -132,7 +125,6 @@ export default function SignupPage() {
               Log in
             </Link>
           </div>
-        </div>
       </section>
     </main>
   );
