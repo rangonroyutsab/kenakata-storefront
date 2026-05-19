@@ -139,7 +139,7 @@ export function OrderConfirmation({ orderId }: OrderConfirmationProps) {
           </div>
         </div>
 
-        <div className="mt-8 grid gap-6 rounded-xl bg-white p-6 text-left md:grid-cols-2">
+        <div className="mt-8 grid gap-6 rounded-xl bg-[var(--surface-container-lowest)] p-6 text-left text-[var(--on-surface)] md:grid-cols-2">
           <div>
             <h3 className="font-headline mb-2 flex items-center gap-2 text-lg font-bold">
               <MapPin className="text-[var(--tertiary)]" size={20} />
@@ -167,7 +167,7 @@ export function OrderConfirmation({ orderId }: OrderConfirmationProps) {
               Payment Method
             </h3>
             <p className="text-sm leading-relaxed text-[var(--on-surface-variant)]">
-              Mock card ending in •••• 4242
+              Demo payment reference ending in 4242
               <br />
               {order.customer.email}
             </p>

@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import { Lock, ShoppingBag, Trash2, X } from "lucide-react";
 
+import { useAuth } from "@/components/AuthProvider";
 import { ButtonLink } from "@/components/ui/Button";
 import { IconButton } from "@/components/ui/IconButton";
 import { QuantityControl } from "@/components/ui/QuantityControl";
@@ -59,18 +60,27 @@ function parseSavedCart(savedCart: string | null) {
 }
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
+    const { user } = useAuth();
     const [isCartOpen, setIsCartOpen] = useState(false);
-    const [items, setItems] = useState<CartItem[]>(() => {
-        if (typeof window === "undefined") {
-            return [];
-        }
-
-        return parseSavedCart(window.localStorage.getItem(CART_STORAGE_KEY));
-    });
+    const [items, setItems] = useState<CartItem[]>([]);
+    const [hasHydrated, setHasHydrated] = useState(false);
 
     useEffect(() => {
+        const savedItems = parseSavedCart(window.localStorage.getItem(CART_STORAGE_KEY));
+
+        queueMicrotask(() => {
+            setItems(savedItems);
+            setHasHydrated(true);
+        });
+    }, []);
+
+    useEffect(() => {
+        if (!hasHydrated) {
+            return;
+        }
+
         window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
-    }, [items]);
+    }, [hasHydrated, items]);
 
     function addToCart(product: Product) {
         setItems((currentItems) => {
@@ -159,6 +169,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
             {children}
             <CartDrawer
                 closeCart={closeCart}
+                checkoutHref={user ? "/checkout" : "/login?next=/checkout"}
+                checkoutLabel={user ? "Proceed to Checkout" : "Log in to Checkout"}
                 decreaseQuantity={decreaseQuantity}
                 increaseQuantity={increaseQuantity}
                 isCartOpen={isCartOpen}
@@ -180,6 +192,8 @@ export function useCart() {
 }
 
 type CartDrawerProps = {
+    checkoutHref: string;
+    checkoutLabel: string;
     closeCart: () => void;
     decreaseQuantity: (productId: number) => void;
     increaseQuantity: (productId: number) => void;
@@ -189,6 +203,8 @@ type CartDrawerProps = {
 };
 
 function CartDrawer({
+    checkoutHref,
+    checkoutLabel,
     closeCart,
     decreaseQuantity,
     increaseQuantity,
@@ -313,11 +329,11 @@ function CartDrawer({
 
                     {items.length > 0 ? (
                         <ButtonLink
-                            href="/checkout"
+                            href={checkoutHref}
                             className="w-full py-4 text-base"
                             onClick={closeCart}
                         >
-                            Proceed to Checkout
+                            {checkoutLabel}
                         </ButtonLink>
                     ) : (
                         <ButtonLink

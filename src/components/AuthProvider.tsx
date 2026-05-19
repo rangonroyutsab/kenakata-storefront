@@ -42,41 +42,49 @@ function parseStoredJson<T>(value: string | null): T | null {
 }
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [tokens, setTokens] = useState<AuthTokens | null>(() => {
-    if (typeof window === "undefined") {
-      return null;
-    }
-
-    return parseStoredJson<AuthTokens>(
-      window.localStorage.getItem(TOKEN_STORAGE_KEY)
-    );
-  });
-  const [user, setUser] = useState<AuthProfile | null>(() => {
-    if (typeof window === "undefined") {
-      return null;
-    }
-
-    return parseStoredJson<AuthProfile>(
-      window.localStorage.getItem(PROFILE_STORAGE_KEY)
-    );
-  });
-  const [isLoading, setIsLoading] = useState(false);
+  const [tokens, setTokens] = useState<AuthTokens | null>(null);
+  const [user, setUser] = useState<AuthProfile | null>(null);
+  const [hasHydrated, setHasHydrated] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
+    const storedTokens = parseStoredJson<AuthTokens>(
+      window.localStorage.getItem(TOKEN_STORAGE_KEY)
+    );
+    const storedUser = parseStoredJson<AuthProfile>(
+      window.localStorage.getItem(PROFILE_STORAGE_KEY)
+    );
+
+    queueMicrotask(() => {
+      setTokens(storedTokens);
+      setUser(storedUser);
+      setHasHydrated(true);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!hasHydrated) {
+      return;
+    }
+
     if (tokens) {
       window.localStorage.setItem(TOKEN_STORAGE_KEY, JSON.stringify(tokens));
     } else {
       window.localStorage.removeItem(TOKEN_STORAGE_KEY);
     }
-  }, [tokens]);
+  }, [hasHydrated, tokens]);
 
   useEffect(() => {
+    if (!hasHydrated) {
+      return;
+    }
+
     if (user) {
       window.localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(user));
     } else {
       window.localStorage.removeItem(PROFILE_STORAGE_KEY);
     }
-  }, [user]);
+  }, [hasHydrated, user]);
 
   async function refreshProfile() {
     if (!tokens?.access_token) {
@@ -88,7 +96,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   async function login(input: LoginInput) {
-    setIsLoading(true);
+    setIsSubmitting(true);
 
     try {
       const nextTokens = await loginRequest(input);
@@ -96,12 +104,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setTokens(nextTokens);
       setUser(profile);
     } finally {
-      setIsLoading(false);
+      setIsSubmitting(false);
     }
   }
 
   async function signup(input: CreateUserInput) {
-    setIsLoading(true);
+    setIsSubmitting(true);
 
     try {
       const availability = await checkEmailAvailability(input.email);
@@ -112,7 +120,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       await createUser(input);
     } finally {
-      setIsLoading(false);
+      setIsSubmitting(false);
     }
   }
 
@@ -126,7 +134,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       value={{
         user,
         tokens,
-        isLoading,
+        isLoading: !hasHydrated || isSubmitting,
         login,
         signup,
         logout,

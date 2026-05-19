@@ -20,6 +20,11 @@ export default function SignupPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
 
+  function getNextPath() {
+    const requestedPath = new URLSearchParams(window.location.search).get("next");
+    return requestedPath?.startsWith("/") ? requestedPath : "/account";
+  }
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
@@ -36,7 +41,8 @@ export default function SignupPage() {
         password,
         avatar: DEFAULT_AVATAR,
       });
-      router.push("/login?signup=success");
+      const nextPath = getNextPath();
+      router.push(`/login?signup=success&next=${encodeURIComponent(nextPath)}`);
     } catch (caughtError) {
       setError(
         caughtError instanceof Error

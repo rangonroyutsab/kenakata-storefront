@@ -29,13 +29,27 @@ function getInitialTheme(): Theme {
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>(getInitialTheme);
+  const [theme, setTheme] = useState<Theme>("light");
+  const [hasHydrated, setHasHydrated] = useState(false);
 
   useEffect(() => {
+    const initialTheme = getInitialTheme();
+
+    queueMicrotask(() => {
+      setTheme(initialTheme);
+      setHasHydrated(true);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!hasHydrated) {
+      return;
+    }
+
     document.documentElement.dataset.theme = theme;
     document.documentElement.style.colorScheme = theme;
     window.localStorage.setItem(THEME_STORAGE_KEY, theme);
-  }, [theme]);
+  }, [hasHydrated, theme]);
 
   function toggleTheme() {
     setTheme((currentTheme) =>

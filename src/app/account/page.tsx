@@ -8,7 +8,23 @@ import { useAuth } from "@/components/AuthProvider";
 import { Button, ButtonLink } from "@/components/ui/Button";
 
 export default function AccountPage() {
-  const { logout, user } = useAuth();
+  const { isLoading, logout, user } = useAuth();
+
+  if (isLoading) {
+    return (
+      <main className="flex min-h-screen items-center justify-center bg-[var(--background)] px-6 py-12 text-center">
+        <section className="max-w-md rounded-xl bg-[var(--surface-container-lowest)] p-8 shadow-soft">
+          <UserRound className="mx-auto text-[var(--primary)]" size={36} />
+          <h1 className="font-headline mt-4 text-3xl font-bold">
+            Loading account
+          </h1>
+          <p className="mt-3 text-[var(--on-surface-variant)]">
+            Checking your saved sign-in status.
+          </p>
+        </section>
+      </main>
+    );
+  }
 
   if (!user) {
     return (
@@ -119,7 +135,7 @@ export default function AccountPage() {
                 <div className="rounded-lg bg-[var(--surface-container-high)] p-4">
                   <p className="font-bold tracking-[0.2em]">•••• 4242</p>
                   <p className="mt-1 text-sm text-[var(--on-surface-variant)]">
-                    Demo card, expires 12/25
+                    Demo payment reference
                   </p>
                 </div>
               </div>
@@ -132,8 +148,8 @@ export default function AccountPage() {
             </h2>
             <div className="space-y-4">
               {[
-                ["#KNK-8924", "Delivered", "Handcrafted Ceramic Vase + 1 more item", "$145.00"],
-                ["#KNK-8711", "Processing", "Organic Linen Throw Blanket", "$89.00"],
+                ["#KNK-8924", "Delivered", "Ceramic Vase + 1 more item", "$145.00"],
+                ["#KNK-8711", "Processing", "Linen Throw Blanket", "$89.00"],
               ].map(([id, status, title, total]) => (
                 <article
                   className="flex flex-col gap-4 rounded-xl bg-[var(--surface-container)] p-6 shadow-soft sm:flex-row sm:items-center sm:justify-between"

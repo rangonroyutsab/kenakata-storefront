@@ -4,12 +4,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { Trash2 } from "lucide-react";
 
+import { useAuth } from "@/components/AuthProvider";
 import { useCart } from "@/components/CartProvider";
 import { ButtonLink } from "@/components/ui/Button";
 import { QuantityControl } from "@/components/ui/QuantityControl";
 import { calculateSubtotal, formatMoney, getProductImage } from "@/lib/commerce";
 
 export default function CartPage() {
+  const { user } = useAuth();
   const {
     clearCart,
     decreaseQuantity,
@@ -19,6 +21,7 @@ export default function CartPage() {
   } = useCart();
 
   const subtotal = calculateSubtotal(items);
+  const checkoutHref = user ? "/checkout" : "/login?next=/checkout";
 
   return (
     <main className="min-h-screen bg-[var(--background)] px-6 py-12 text-[var(--on-surface)] lg:px-12">
@@ -143,8 +146,8 @@ export default function CartPage() {
                   </span>
                 </div>
               </div>
-              <ButtonLink href="/checkout" className="mt-6 w-full py-4">
-                Proceed to Checkout
+              <ButtonLink href={checkoutHref} className="mt-6 w-full py-4">
+                {user ? "Proceed to Checkout" : "Log in to Checkout"}
               </ButtonLink>
             </aside>
           </div>

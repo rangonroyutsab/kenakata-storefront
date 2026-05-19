@@ -16,13 +16,18 @@ export default function LoginPage() {
   const [password, setPassword] = useState("changeme");
   const [error, setError] = useState("");
 
+  function getNextPath() {
+    const requestedPath = new URLSearchParams(window.location.search).get("next");
+    return requestedPath?.startsWith("/") ? requestedPath : "/account";
+  }
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
 
     try {
       await login({ email, password });
-      router.push("/account");
+      router.push(getNextPath());
     } catch (caughtError) {
       setError(
         caughtError instanceof Error

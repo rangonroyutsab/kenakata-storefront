@@ -22,16 +22,19 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
   const params = await searchParams;
   const page = Math.max(1, Number(params.page ?? "1") || 1);
   const offset = (page - 1) * PRODUCTS_PER_PAGE;
+  const apiLimit = PRODUCTS_PER_PAGE + 1;
 
-  const [categories, products] = await Promise.all([
+  const [categories, apiProducts] = await Promise.all([
     getCategories(),
     params.category
       ? getProductsByCategoryId(params.category, {
           offset,
-          limit: PRODUCTS_PER_PAGE,
+          limit: apiLimit,
         })
-      : getProducts({ offset, limit: PRODUCTS_PER_PAGE }),
+      : getProducts({ offset, limit: apiLimit }),
   ]);
+  const hasNextPage = apiProducts.length > PRODUCTS_PER_PAGE;
+  const products = apiProducts.slice(0, PRODUCTS_PER_PAGE);
 
   return (
     <main className="min-h-screen bg-[var(--background)] text-[var(--on-surface)]">
@@ -47,7 +50,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
       <ShopBrowser
         activeCategoryId={params.category}
         categories={categories}
-        limit={PRODUCTS_PER_PAGE}
+        hasNextPage={hasNextPage}
         page={page}
         products={products}
       />

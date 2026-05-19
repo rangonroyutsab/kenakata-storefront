@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -39,7 +39,7 @@ const INITIAL_FORM: CheckoutFormValues = {
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { user } = useAuth();
+  const { isLoading, user } = useAuth();
   const { clearCart, items } = useCart();
   const [form, setForm] = useState<CheckoutFormValues>({
     ...INITIAL_FORM,
@@ -53,6 +53,23 @@ export default function CheckoutPage() {
   const shipping = calculateShipping(subtotal);
   const tax = calculateTax(subtotal);
   const total = subtotal + shipping + tax;
+
+  useEffect(() => {
+    if (!user) {
+      return;
+    }
+
+    const [firstName = "", ...lastNameParts] = user.name?.split(" ") ?? [];
+
+    queueMicrotask(() => {
+      setForm((current) => ({
+        ...current,
+        email: current.email || user.email || "",
+        firstName: current.firstName || firstName,
+        lastName: current.lastName || lastNameParts.join(" "),
+      }));
+    });
+  }, [user]);
 
   function updateField<K extends keyof CheckoutFormValues>(
     key: K,
@@ -73,10 +90,12 @@ export default function CheckoutPage() {
       nextErrors.zip = "Please enter a valid 5-digit ZIP.";
     }
     if (form.paymentMethod === "card") {
-      if (!form.cardNumber) nextErrors.cardNumber = "Card number is required.";
-      if (!form.cardExpiry) nextErrors.cardExpiry = "Expiration is required.";
-      if (!form.cardCvc) nextErrors.cardCvc = "Security code is required.";
-      if (!form.cardName) nextErrors.cardName = "Name on card is required.";
+      if (!form.cardNumber) {
+        nextErrors.cardNumber = "Demo payment reference is required.";
+      }
+      if (!form.cardExpiry) nextErrors.cardExpiry = "Reference date is required.";
+      if (!form.cardCvc) nextErrors.cardCvc = "Access code is required.";
+      if (!form.cardName) nextErrors.cardName = "Billing name is required.";
     }
 
     setErrors(nextErrors);
@@ -86,7 +105,7 @@ export default function CheckoutPage() {
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    if (!validate() || items.length === 0) {
+    if (!user || !validate() || items.length === 0) {
       return;
     }
 
@@ -99,13 +118,55 @@ export default function CheckoutPage() {
       shipping,
       tax,
       total,
-      customer: form,
+      customer: {
+        ...form,
+        email: user.email || form.email,
+      },
     };
 
     window.sessionStorage.setItem("kenakata-latest-order", JSON.stringify(order));
     window.localStorage.setItem("kenakata-latest-order", JSON.stringify(order));
     clearCart();
     router.push(`/checkout/success?orderId=${order.id}`);
+  }
+
+  if (isLoading) {
+    return (
+      <main className="flex min-h-screen items-center justify-center bg-[var(--background)] px-6 py-12 text-center">
+        <section className="max-w-md rounded-xl bg-[var(--surface-container-lowest)] p-8 shadow-soft">
+          <ShoppingBag className="mx-auto text-[var(--primary)]" size={36} />
+          <h1 className="font-headline mt-4 text-3xl font-bold">
+            Loading checkout
+          </h1>
+          <p className="mt-3 text-[var(--on-surface-variant)]">
+            Checking your sign-in status before checkout.
+          </p>
+        </section>
+      </main>
+    );
+  }
+
+  if (!user) {
+    return (
+      <main className="flex min-h-screen items-center justify-center bg-[var(--background)] px-6 py-12 text-center">
+        <section className="max-w-md rounded-xl bg-[var(--surface-container-lowest)] p-8 shadow-soft">
+          <Lock className="mx-auto text-[var(--primary)]" size={36} />
+          <h1 className="font-headline mt-4 text-3xl font-bold">
+            Log in to checkout
+          </h1>
+          <p className="mt-3 text-[var(--on-surface-variant)]">
+            Please log in before placing an order so we can connect the order to
+            your account.
+          </p>
+          <Link
+            href="/login?next=/checkout"
+            className="mt-6 inline-flex rounded-xl bg-[var(--primary)] px-5 py-3 font-bold text-[var(--on-primary)]"
+          >
+            Log in to continue
+          </Link>
+        </section>
+      </main>
+    );
   }
 
   if (items.length === 0) {
@@ -133,6 +194,7 @@ export default function CheckoutPage() {
   return (
     <main className="bg-[var(--background)] px-6 py-12 text-[var(--on-surface)] lg:px-12">
       <form
+        autoComplete="off"
         className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1fr_420px]"
         onSubmit={handleSubmit}
       >
@@ -158,7 +220,7 @@ export default function CheckoutPage() {
                   }
                   type="checkbox"
                 />
-                Keep me up to date on news and exclusive offers
+                Keep me up to date on new products and exclusive offers
               </label>
             </div>
           </div>
@@ -225,8 +287,8 @@ export default function CheckoutPage() {
             <StepTitle index={3} title="Payment" />
             <div className="rounded-xl bg-[var(--surface-container)] p-6 shadow-soft">
               <p className="mb-5 text-sm text-[var(--on-surface-variant)]">
-                All transactions are secure and encrypted. This is a mock
-                payment form for the MVP.
+                This MVP uses demo payment details only. No real card or payment
+                data is processed.
               </p>
               <div className="rounded-lg border border-[var(--outline-variant)] bg-[var(--surface)]">
                 <label className="flex items-center justify-between border-b border-[var(--outline-variant)] p-4">
@@ -236,7 +298,7 @@ export default function CheckoutPage() {
                       onChange={() => updateField("paymentMethod", "card")}
                       type="radio"
                     />
-                    Credit card
+                    Demo payment
                   </span>
                   <CreditCard size={20} />
                 </label>
@@ -244,7 +306,9 @@ export default function CheckoutPage() {
                   <div className="md:col-span-2">
                     <FormField
                       error={errors.cardNumber}
-                      label="Card number"
+                      autoComplete="off"
+                      inputMode="numeric"
+                      label="Demo payment reference"
                       onChange={(event) =>
                         updateField("cardNumber", event.target.value)
                       }
@@ -253,7 +317,8 @@ export default function CheckoutPage() {
                   </div>
                   <FormField
                     error={errors.cardExpiry}
-                    label="Expiration date"
+                    autoComplete="off"
+                    label="Reference date"
                     onChange={(event) =>
                       updateField("cardExpiry", event.target.value)
                     }
@@ -261,7 +326,9 @@ export default function CheckoutPage() {
                   />
                   <FormField
                     error={errors.cardCvc}
-                    label="Security code"
+                    autoComplete="off"
+                    inputMode="numeric"
+                    label="Access code"
                     onChange={(event) =>
                       updateField("cardCvc", event.target.value)
                     }
@@ -270,7 +337,8 @@ export default function CheckoutPage() {
                   <div className="md:col-span-2">
                     <FormField
                       error={errors.cardName}
-                      label="Name on card"
+                      autoComplete="off"
+                      label="Billing name"
                       onChange={(event) =>
                         updateField("cardName", event.target.value)
                       }

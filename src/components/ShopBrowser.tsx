@@ -11,10 +11,10 @@ type SortOption = "default" | "price-low" | "price-high" | "name-asc" | "name-de
 
 type ShopBrowserProps = {
   categories: Category[];
+  hasNextPage: boolean;
   products: Product[];
   activeCategoryId?: string;
   page: number;
-  limit: number;
 };
 
 function pageHref(page: number, categoryId?: string) {
@@ -31,7 +31,7 @@ function pageHref(page: number, categoryId?: string) {
 export function ShopBrowser({
   activeCategoryId,
   categories,
-  limit,
+  hasNextPage,
   page,
   products,
 }: ShopBrowserProps) {
@@ -58,6 +58,12 @@ export function ShopBrowser({
       return 0;
     });
   }, [maxPrice, products, query, sort]);
+  const paginationPages = useMemo(() => {
+    const start = Math.max(1, page - 2);
+    const end = page + (hasNextPage ? 2 : 0);
+
+    return Array.from({ length: end - start + 1 }, (_, index) => start + index);
+  }, [hasNextPage, page]);
 
   const filters = (
     <div className="space-y-8">
@@ -172,7 +178,7 @@ export function ShopBrowser({
           emptyMessage="Try changing your search, category, or price filter."
         />
 
-        <div className="mt-12 flex items-center justify-center gap-4 border-t border-[var(--outline-variant)]/30 pt-8">
+        <div className="mt-12 flex items-center justify-center gap-2 border-t border-[var(--outline-variant)]/30 pt-8 sm:gap-3">
           <Link
             aria-disabled={page <= 1}
             className={`inline-flex h-10 w-10 items-center justify-center rounded-full ${
@@ -184,13 +190,28 @@ export function ShopBrowser({
           >
             <ChevronLeft size={20} />
           </Link>
-          <span className="inline-flex h-12 min-w-12 items-center justify-center rounded-full bg-[var(--primary)] px-4 font-bold text-white">
-            {page}
-          </span>
+          {paginationPages.map((paginationPage) =>
+            paginationPage === page ? (
+              <span
+                className="inline-flex h-12 min-w-12 items-center justify-center rounded-full bg-[var(--primary)] px-4 font-bold text-[var(--on-primary)]"
+                key={paginationPage}
+              >
+                {paginationPage}
+              </span>
+            ) : (
+              <Link
+                className="inline-flex h-10 min-w-10 items-center justify-center rounded-full px-3 font-bold text-[var(--on-surface-variant)] transition hover:bg-[var(--surface-container)] hover:text-[var(--primary)]"
+                href={pageHref(paginationPage, activeCategoryId)}
+                key={paginationPage}
+              >
+                {paginationPage}
+              </Link>
+            )
+          )}
           <Link
-            aria-disabled={products.length < limit}
+            aria-disabled={!hasNextPage}
             className={`inline-flex h-10 w-10 items-center justify-center rounded-full ${
-              products.length < limit
+              !hasNextPage
                 ? "pointer-events-none opacity-40"
                 : "hover:bg-[var(--surface-container)]"
             }`}
